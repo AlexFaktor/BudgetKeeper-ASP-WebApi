@@ -1,4 +1,5 @@
 using BudgetKeeper.Database.Entity;
+using BudgetKeeper.Models.DTO.Category;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -17,18 +18,15 @@ namespace BudgetKeeper.Controllers
         }
 
 
-        [HttpGet("get-all-categorys")]
+        [HttpGet("all")]
         public async Task<IActionResult> Get()
         {
             var categorys = _categoryService.GetAll();
 
-            if (categorys.Count != 0)
-                return Ok(categorys);
-
-            return NoContent();
+            return Ok(categorys);
         }
 
-        [HttpGet("get-category-by-id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             var category = _categoryService.Get(id);
@@ -36,39 +34,28 @@ namespace BudgetKeeper.Controllers
             if (category != null)
                 return Ok(category);
 
-            return NoContent();
-        }
-
-        [HttpGet("get-category-by-name/{name}")]
-        public async Task<IActionResult> Get([FromRoute] string name)
-        {
-            var category = _categoryService.Get(name);
-
-            if (category != null)
-                return Ok(category);
-
-            return NoContent();
+            return NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CategoryRecord category)
+        public async Task<IActionResult> Create([FromBody] CategoryCreateDto categoryDto)
         {
-            if (category == null)
+            if (categoryDto is null)
                 return BadRequest();
 
-            if(_categoryService.Add(category))
-                return CreatedAtAction(nameof(category), new { id = category.Id}, category);
+            if (_categoryService.Add(categoryDto))
+                return CreatedAtAction(nameof(Get), new { id = categoryDto.Name }, categoryDto);
 
             return BadRequest();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CategoryRecord category)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CategoryUpdateDto category)
         {
-            if (category == null || id != category.Id)
+            if (category == null)
                 return BadRequest();
 
-            if (_categoryService.Update(category))
+            if (_categoryService.Update(id, category))
                 return Ok(category);
 
             return NotFound();

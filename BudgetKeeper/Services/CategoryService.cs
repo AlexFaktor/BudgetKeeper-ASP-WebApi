@@ -1,5 +1,6 @@
 ﻿using BudgetKeeper.Database.Database;
 using BudgetKeeper.Database.Entity;
+using BudgetKeeper.Models.DTO.Category;
 using BudgetKeeper.Resource.Interface;
 
 namespace BudgetKeeper.Services
@@ -12,13 +13,18 @@ namespace BudgetKeeper.Services
         { 
             _db = db;
         }
-        
-        public bool Add(CategoryRecord record)
-        { 
-            if(Get(record.Name) != null)
+
+        public bool Add(CategoryCreateDto categoryDto)
+        {
+            if (Get(categoryDto.Name) != null)
                 return false;
 
-            _db.Categories.Add(record);
+            var category = new CategoryRecord
+            {
+                Name = categoryDto.Name
+            };
+
+            _db.Categories.Add(category);
             _db.SaveChanges();
             return true;
         }
@@ -27,15 +33,12 @@ namespace BudgetKeeper.Services
         public CategoryRecord? Get(Guid id) => _db.Categories.FirstOrDefault(c => c.Id == id);
         public CategoryRecord? Get(string name) => _db.Categories.FirstOrDefault(c => c.Name == name);
 
-        public bool Update(CategoryRecord record)
+        public bool Update(Guid id, CategoryUpdateDto categoryDto)
         {
-            if (Get(record.Name) != null)
-                return false;
-
-            var existingRecord = _db.Categories.FirstOrDefault(c => c.Id == record.Id);
+            var existingRecord = _db.Categories.FirstOrDefault(c => c.Id == id);
             if (existingRecord != null)
             {
-                existingRecord.Name = existingRecord.Name;
+                existingRecord.Name = categoryDto.Name;
                 _db.SaveChanges();
                 return true;
             }
