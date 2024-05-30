@@ -14,7 +14,7 @@ namespace BudgetKeeper.Services
             _db = db;
         }
 
-        public TransactionRecord? Add(TransactionCreateDto transactionDto)
+        public Transaction? Add(TransactionCreateDto transactionDto)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == transactionDto.CategoryId);
             if (category is null)
@@ -24,10 +24,10 @@ namespace BudgetKeeper.Services
                     return null;
             }
 
-            var record = new TransactionRecord
+            var record = new Transaction
             {
-                Name = transactionDto.Name,
-                Value = transactionDto.Income,
+                Comment = transactionDto.Name,
+                Amount = transactionDto.Income,
                 Category = category,
                 CategoryId = category.Id,
                 Time = transactionDto.Time
@@ -38,21 +38,13 @@ namespace BudgetKeeper.Services
             return record;
         }
 
-        public List<TransactionRecord> GetAll() => _db.Transactions.ToList();
-        public TransactionRecord? Get(Guid id) => _db.Transactions.FirstOrDefault(c => c.Id == id);
-        public List<TransactionRecord> Get(DateTime from, DateTime to) => _db.Transactions.Where(t => t.Time >= from && t.Time <= to).ToList();
+        public List<Transaction> GetAll() => _db.Transactions.ToList();
+        public Transaction? Get(Guid id) => _db.Transactions.FirstOrDefault(c => c.Id == id);
+        public List<Transaction> Get(DateTime from, DateTime to) => _db.Transactions.Where(t => t.Time >= from && t.Time <= to).ToList();
 
-        public List<TransactionRecord> Get(DateTime day)
-        {
-            DateTime dayStart = day.Date; 
-            DateTime dayEnd = day.Date.AddDays(1).AddTicks(-1);
+        public List<Transaction> Get(DateTime day) => _db.Transactions.Where(t => t.Time.Date == day.Date).ToList();
 
-            return _db.Transactions
-                      .Where(t => t.Time >= dayStart && t.Time <= dayEnd)
-                      .ToList();
-        }
-
-        public TransactionRecord? Update(Guid id,TransactionUpdateDto transactionDto)
+        public Transaction? Update(Guid id,TransactionUpdateDto transactionDto)
         {
             var record = _db.Transactions.FirstOrDefault(c => c.Id == id);
             var category = _db.Categories.FirstOrDefault(c => c.Id == transactionDto.CategoryId);
@@ -65,8 +57,8 @@ namespace BudgetKeeper.Services
 
             if (record is not null)
             {
-                record.Name = transactionDto.Name;
-                record.Value = transactionDto.Income;
+                record.Comment = transactionDto.Name;
+                record.Amount = transactionDto.Income;
                 record.Time = transactionDto.Time;
                 record.Category = category;
                 record.CategoryId = transactionDto.CategoryId;
@@ -88,7 +80,7 @@ namespace BudgetKeeper.Services
             return false;
         }
 
-        public bool Delete(TransactionRecord record)
+        public bool Delete(Transaction record)
         {
             return Delete(record.Id);
         }

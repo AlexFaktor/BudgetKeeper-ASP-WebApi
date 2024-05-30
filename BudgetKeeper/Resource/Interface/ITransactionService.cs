@@ -5,13 +5,13 @@ namespace BudgetKeeper.Resource.Interface
 {
     public interface ITransactionService
     {
-        TransactionRecord? Add(TransactionCreateDto record);
-        List<TransactionRecord> GetAll();
-        TransactionRecord? Get(Guid id);
-        List<TransactionRecord> Get(DateTime from, DateTime to);
-        List<TransactionRecord> Get(DateTime day);
-        TransactionRecord? Update(Guid id,TransactionUpdateDto record);
+        Transaction? Add(TransactionCreateDto record);
+        List<Transaction> GetAll();
+        Transaction? Get(Guid id);
+        List<Transaction> Get(DateTime from, DateTime to);
+        List<Transaction> Get(DateTime day);
+        Transaction? Update(Guid id,TransactionUpdateDto record);
         bool Delete(Guid id);
-        bool Delete(TransactionRecord record);
+        bool Delete(Transaction record);
     }
 }

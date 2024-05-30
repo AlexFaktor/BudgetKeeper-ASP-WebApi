@@ -9,11 +9,11 @@ namespace BudgetKeeper.Models
         public decimal Value { get; set; }
         public string CategoryName { get; set; }
 
-        public BudgetTransaction(TransactionRecord record)
+        public BudgetTransaction(Transaction record)
         {
             Id = record.Id;
-            Name = record.Name;
-            Value = record.Value;
+            Name = record.Comment;
+            Value = record.Amount;
             CategoryName = record.Category.Name;
         }
     }

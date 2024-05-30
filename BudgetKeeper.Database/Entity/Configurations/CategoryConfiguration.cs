@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BudgetKeeper.Database.Entity.Configurations
 {
-    internal class CategoryConfiguration : IEntityTypeConfiguration<CategoryRecord>
+    internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
-        public void Configure(EntityTypeBuilder<CategoryRecord> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         { 
             builder.HasKey(x => x.Id);
 

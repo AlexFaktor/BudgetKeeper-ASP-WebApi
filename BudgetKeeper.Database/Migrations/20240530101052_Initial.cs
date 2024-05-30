@@ -30,8 +30,8 @@ namespace BudgetKeeper.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
-                    Income = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comment = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CategoryId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -43,7 +43,7 @@ namespace BudgetKeeper.Database.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.InsertData(
@@ -51,17 +51,17 @@ namespace BudgetKeeper.Database.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("035698cd-aade-49a9-9193-6076c659b701"), "Unknown" },
-                    { new Guid("157e8737-e7b3-42a1-bb2c-3332f0767f52"), "Products" },
-                    { new Guid("1a76be85-d3ab-4901-bb73-0959b5f70f9d"), "Activities" },
-                    { new Guid("1c8a1709-26a1-49fb-aee0-77bec0413c50"), "Credit" },
-                    { new Guid("30e1211d-640d-40d0-84ab-b33736b2b998"), "Fine" },
-                    { new Guid("96abf42c-d4ce-4559-8769-e4aeb3924669"), "Preservation" },
-                    { new Guid("9a60b64d-25eb-42df-ab0d-be39b82c9120"), "Salary" },
-                    { new Guid("9d516213-36d0-49ac-9e44-dda8001e2bd1"), "Taxes" },
-                    { new Guid("9d6a303a-5dd8-4f0c-af55-9fd13aed0dab"), "Gifts" },
-                    { new Guid("d12b01b0-21a8-4e27-8e4b-dd49a8e7c238"), "Health" },
-                    { new Guid("eb79826e-f7f6-44b3-877b-668506eb10ed"), "Software" }
+                    { new Guid("1bc72cc8-384b-4b2a-a3f5-16d1e6b23543"), "Unknown" },
+                    { new Guid("52756aa3-c18a-4b22-920b-b9876812bc33"), "Credit" },
+                    { new Guid("541ce086-51aa-4058-9207-9c10be773757"), "Gifts" },
+                    { new Guid("6eececdd-b7f8-41a5-9968-714d67b78a80"), "Taxes" },
+                    { new Guid("7d062311-f7be-4fa9-b0cd-adebe8b6ddb9"), "Fine" },
+                    { new Guid("8f812365-b6d9-425c-b690-6e4f4032de85"), "Preservation" },
+                    { new Guid("992f3450-832c-40ed-89ba-4389b7db8868"), "Software" },
+                    { new Guid("9cd17f10-7bf2-4a7a-98de-5615c6d74dcf"), "Products" },
+                    { new Guid("ccff22a7-cf17-4ca2-94b0-4f432c7833f8"), "Salary" },
+                    { new Guid("dc231561-697a-45ad-8348-9ae673a28ce2"), "Health" },
+                    { new Guid("ee618fab-3ca9-4821-a714-1bee3a895a20"), "Activities" }
                 });
 
             migrationBuilder.CreateIndex(

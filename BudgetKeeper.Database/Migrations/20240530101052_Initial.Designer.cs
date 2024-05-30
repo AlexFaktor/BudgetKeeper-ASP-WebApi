@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetKeeper.Database.Migrations
 {
     [DbContext(typeof(BudgetDbContext))]
-    [Migration("20240529141621_Initial")]
+    [Migration("20240530101052_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace BudgetKeeper.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
 
-            modelBuilder.Entity("BudgetKeeper.Database.Entity.CategoryRecord", b =>
+            modelBuilder.Entity("BudgetKeeper.Database.Entity.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,74 +38,74 @@ namespace BudgetKeeper.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1a76be85-d3ab-4901-bb73-0959b5f70f9d"),
+                            Id = new Guid("ee618fab-3ca9-4821-a714-1bee3a895a20"),
                             Name = "Activities"
                         },
                         new
                         {
-                            Id = new Guid("1c8a1709-26a1-49fb-aee0-77bec0413c50"),
+                            Id = new Guid("52756aa3-c18a-4b22-920b-b9876812bc33"),
                             Name = "Credit"
                         },
                         new
                         {
-                            Id = new Guid("30e1211d-640d-40d0-84ab-b33736b2b998"),
+                            Id = new Guid("7d062311-f7be-4fa9-b0cd-adebe8b6ddb9"),
                             Name = "Fine"
                         },
                         new
                         {
-                            Id = new Guid("9d6a303a-5dd8-4f0c-af55-9fd13aed0dab"),
+                            Id = new Guid("541ce086-51aa-4058-9207-9c10be773757"),
                             Name = "Gifts"
                         },
                         new
                         {
-                            Id = new Guid("d12b01b0-21a8-4e27-8e4b-dd49a8e7c238"),
+                            Id = new Guid("dc231561-697a-45ad-8348-9ae673a28ce2"),
                             Name = "Health"
                         },
                         new
                         {
-                            Id = new Guid("96abf42c-d4ce-4559-8769-e4aeb3924669"),
+                            Id = new Guid("8f812365-b6d9-425c-b690-6e4f4032de85"),
                             Name = "Preservation"
                         },
                         new
                         {
-                            Id = new Guid("157e8737-e7b3-42a1-bb2c-3332f0767f52"),
+                            Id = new Guid("9cd17f10-7bf2-4a7a-98de-5615c6d74dcf"),
                             Name = "Products"
                         },
                         new
                         {
-                            Id = new Guid("9a60b64d-25eb-42df-ab0d-be39b82c9120"),
+                            Id = new Guid("ccff22a7-cf17-4ca2-94b0-4f432c7833f8"),
                             Name = "Salary"
                         },
                         new
                         {
-                            Id = new Guid("eb79826e-f7f6-44b3-877b-668506eb10ed"),
+                            Id = new Guid("992f3450-832c-40ed-89ba-4389b7db8868"),
                             Name = "Software"
                         },
                         new
                         {
-                            Id = new Guid("9d516213-36d0-49ac-9e44-dda8001e2bd1"),
+                            Id = new Guid("6eececdd-b7f8-41a5-9968-714d67b78a80"),
                             Name = "Taxes"
                         },
                         new
                         {
-                            Id = new Guid("035698cd-aade-49a9-9193-6076c659b701"),
+                            Id = new Guid("1bc72cc8-384b-4b2a-a3f5-16d1e6b23543"),
                             Name = "Unknown"
                         });
                 });
 
-            modelBuilder.Entity("BudgetKeeper.Database.Entity.TransactionRecord", b =>
+            modelBuilder.Entity("BudgetKeeper.Database.Entity.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Income")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("TEXT");
@@ -120,12 +120,12 @@ namespace BudgetKeeper.Database.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("BudgetKeeper.Database.Entity.TransactionRecord", b =>
+            modelBuilder.Entity("BudgetKeeper.Database.Entity.Transaction", b =>
                 {
-                    b.HasOne("BudgetKeeper.Database.Entity.CategoryRecord", "Category")
+                    b.HasOne("BudgetKeeper.Database.Entity.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Category");

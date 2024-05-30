@@ -5,11 +5,11 @@ namespace BudgetKeeper.Resource.Interface
 {
     public interface ICategoryService
     {
-        CategoryRecord? Add(CategoryCreateDto record);
-        List<CategoryRecord> GetAll();
-        CategoryRecord? Get(Guid id);
-        CategoryRecord? Get(string name);
-        CategoryRecord? Update(Guid id, CategoryUpdateDto record);
+        Category? Add(CategoryCreateDto record);
+        List<Category> GetAll();
+        Category? Get(Guid id);
+        Category? Get(string name);
+        Category? Update(Guid id, CategoryUpdateDto record);
         bool Delete(Guid id);
 
     }

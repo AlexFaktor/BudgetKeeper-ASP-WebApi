@@ -2,9 +2,9 @@
 {
     public static class CategorySeeder
     {
-        public static IEnumerable<CategoryRecord> CreateBaseCategory()
+        public static IEnumerable<Category> CreateBaseCategory()
         {
-            return new List<CategoryRecord>
+            return new List<Category>
             {
                 new() { Id = Guid.NewGuid(), Name = "Activities" },
                 new() { Id = Guid.NewGuid(), Name = "Credit" },

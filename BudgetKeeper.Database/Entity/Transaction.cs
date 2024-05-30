@@ -1,12 +1,12 @@
 ﻿namespace BudgetKeeper.Database.Entity
 {
-    public class TransactionRecord
+    public class Transaction
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public decimal Value { get; set; }
+        public string Comment { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
 
-        public CategoryRecord Category { get; set; } = new();
+        public Category Category { get; set; } = new();
         public Guid CategoryId { get; set; } = new();
 
         public DateTime Time { get; set; } = DateTime.UtcNow;

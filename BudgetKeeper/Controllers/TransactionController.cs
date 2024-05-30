@@ -30,7 +30,7 @@ namespace BudgetKeeper.Controllers
             return NoContent();
         }
 
-        [HttpGet("get-transaction/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             var transaction = _transactionService.Get(id);

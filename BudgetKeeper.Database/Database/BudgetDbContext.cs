@@ -6,8 +6,8 @@ namespace BudgetKeeper.Database.Database
 {
     public class BudgetDbContext : DbContext 
     {
-        public DbSet<CategoryRecord> Categories { get; set; }
-        public DbSet<TransactionRecord> Transactions { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         public BudgetDbContext(DbContextOptions<BudgetDbContext> options) : base(options)
         { 
