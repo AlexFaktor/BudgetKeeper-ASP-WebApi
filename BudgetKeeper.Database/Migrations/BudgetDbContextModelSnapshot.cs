@@ -35,57 +35,57 @@ namespace BudgetKeeper.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ee618fab-3ca9-4821-a714-1bee3a895a20"),
+                            Id = new Guid("c983e8fa-08d1-4095-873e-e9131a50b0ae"),
                             Name = "Activities"
                         },
                         new
                         {
-                            Id = new Guid("52756aa3-c18a-4b22-920b-b9876812bc33"),
+                            Id = new Guid("7c979f16-a873-45f8-aa7c-1ba712e95494"),
                             Name = "Credit"
                         },
                         new
                         {
-                            Id = new Guid("7d062311-f7be-4fa9-b0cd-adebe8b6ddb9"),
+                            Id = new Guid("24ce6296-851b-40a9-bde1-cac9d77b2ef3"),
                             Name = "Fine"
                         },
                         new
                         {
-                            Id = new Guid("541ce086-51aa-4058-9207-9c10be773757"),
+                            Id = new Guid("37cba832-f797-49c8-85f2-6c5227098bf7"),
                             Name = "Gifts"
                         },
                         new
                         {
-                            Id = new Guid("dc231561-697a-45ad-8348-9ae673a28ce2"),
+                            Id = new Guid("9f30e76e-dbfb-4280-ae66-6450378f0fa6"),
                             Name = "Health"
                         },
                         new
                         {
-                            Id = new Guid("8f812365-b6d9-425c-b690-6e4f4032de85"),
+                            Id = new Guid("f4b67b31-58fd-4784-9528-305df36ebe64"),
                             Name = "Preservation"
                         },
                         new
                         {
-                            Id = new Guid("9cd17f10-7bf2-4a7a-98de-5615c6d74dcf"),
+                            Id = new Guid("ced59dfe-4571-4096-b006-3717a1ef13a0"),
                             Name = "Products"
                         },
                         new
                         {
-                            Id = new Guid("ccff22a7-cf17-4ca2-94b0-4f432c7833f8"),
+                            Id = new Guid("d73b6844-dc87-46e3-9d33-0d9b4d84e483"),
                             Name = "Salary"
                         },
                         new
                         {
-                            Id = new Guid("992f3450-832c-40ed-89ba-4389b7db8868"),
+                            Id = new Guid("99663bad-9b23-455a-b6d1-70925b9158d9"),
                             Name = "Software"
                         },
                         new
                         {
-                            Id = new Guid("6eececdd-b7f8-41a5-9968-714d67b78a80"),
+                            Id = new Guid("c66ae73f-e3d9-4c67-8f78-3ef6b0e76bf9"),
                             Name = "Taxes"
                         },
                         new
                         {
-                            Id = new Guid("1bc72cc8-384b-4b2a-a3f5-16d1e6b23543"),
+                            Id = new Guid("3dd99611-4824-4e98-8224-0bd8534d563b"),
                             Name = "Unknown"
                         });
                 });

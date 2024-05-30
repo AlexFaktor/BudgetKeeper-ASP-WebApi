@@ -1,4 +1,4 @@
-﻿using BudgetKeeper.Models.DTO.Transaction;
+﻿using BudgetKeeper.Models.DTO.TransactionDtos;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.AspNetCore.Mvc;
 

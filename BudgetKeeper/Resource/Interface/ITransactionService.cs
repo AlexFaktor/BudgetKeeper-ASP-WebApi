@@ -1,16 +1,16 @@
 ﻿using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.Transaction;
+using BudgetKeeper.Models.DTO.TransactionDtos;
 
 namespace BudgetKeeper.Resource.Interface
 {
     public interface ITransactionService
     {
-        Task<Transaction?> AddAsync(TransactionCreateDto record);
-        Task<List<Transaction>> GetAllAsync();
-        Task<Transaction?> GetAsync(Guid id);
-        Task<List<Transaction>> GetAsync(DateTime from, DateTime to);
-        Task<List<Transaction>> GetAsync(DateTime day);
-        Task<Transaction?> UpdateAsync(Guid id,TransactionUpdateDto record);
+        Task<TransactionDto?> AddAsync(TransactionCreateDto record);
+        Task<List<TransactionDto>> GetAllAsync();
+        Task<TransactionDto?> GetAsync(Guid id);
+        Task<List<TransactionDto>> GetAsync(DateTime from, DateTime to);
+        Task<List<TransactionDto>> GetAsync(DateTime day);
+        Task<TransactionDto?> UpdateAsync(Guid id,TransactionUpdateDto record);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> DeleteAsync(Transaction record);
     }

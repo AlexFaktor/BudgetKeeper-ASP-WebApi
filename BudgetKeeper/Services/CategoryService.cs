@@ -1,6 +1,6 @@
 ﻿using BudgetKeeper.Database.Database;
 using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.Category;
+using BudgetKeeper.Models.DTO.CategoryDtos;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +15,7 @@ namespace BudgetKeeper.Services
             _db = db;
         }
 
-        public async Task<Category?> AddAsync(CategoryCreateDto categoryDto)
+        public async Task<CategoryDto?> AddAsync(CategoryCreateDto categoryDto)
         {
             if (categoryDto.Name is null)
                 return null;
@@ -33,13 +33,20 @@ namespace BudgetKeeper.Services
             return await GetAsync(category.Name);
         }
 
-        public async Task<List<Category>> GetAllAsync() => await _db.Categories.ToListAsync();
+        public async Task<List<CategoryDto>> GetAllAsync() => await _db.Categories.Select(c => new CategoryDto(c)).ToListAsync();
 
-        public async Task<Category?> GetAsync(Guid id) => await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        public async Task<CategoryDto?> GetAsync(Guid id)
+        {
+            var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            return category == null ? null : new CategoryDto(category);
+        }
 
-        public async Task<Category?> GetAsync(string name) => await _db.Categories.FirstOrDefaultAsync(c => c.Name.ToLower().Trim() == name.ToLower().Trim());
-
-        public async Task<Category?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto)
+        public async Task<CategoryDto?> GetAsync(string name)
+        {
+            var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name.ToLower().Trim() == name.ToLower().Trim());
+            return category == null ? null : new CategoryDto { Id = category.Id, Name = category.Name };
+        }
+        public async Task<CategoryDto?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto)
         {
             if (categoryDto.Name is null)
                 return null;
@@ -52,7 +59,7 @@ namespace BudgetKeeper.Services
             {
                 existingRecord.Name = categoryDto.Name;
                 await _db.SaveChangesAsync();
-                return existingRecord;
+                return new CategoryDto(existingRecord);
             }
             return null;
         }

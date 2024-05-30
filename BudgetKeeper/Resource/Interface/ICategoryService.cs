@@ -1,15 +1,15 @@
 ﻿using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.Category;
+using BudgetKeeper.Models.DTO.CategoryDtos;
 
 namespace BudgetKeeper.Resource.Interface
 {
     public interface ICategoryService
     {
-        Task<Category?> AddAsync(CategoryCreateDto categoryDto);
-        Task<List<Category>> GetAllAsync();
-        Task<Category?> GetAsync(Guid id);
-        Task<Category?> GetAsync(string name);
-        Task<Category?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto);
+        Task<CategoryDto?> AddAsync(CategoryCreateDto categoryDto);
+        Task<List<CategoryDto>> GetAllAsync();
+        Task<CategoryDto?> GetAsync(Guid id);
+        Task<CategoryDto?> GetAsync(string name);
+        Task<CategoryDto?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> DeleteAsync(Category record);
     }

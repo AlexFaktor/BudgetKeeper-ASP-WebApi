@@ -1,6 +1,7 @@
 ﻿using BudgetKeeper.Database.Database;
 using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.Transaction;
+using BudgetKeeper.Models.DTO.CategoryDtos;
+using BudgetKeeper.Models.DTO.TransactionDtos;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace BudgetKeeper.Services
             _db = db;
         }
 
-        public async Task<Transaction?> AddAsync(TransactionCreateDto transactionDto)
+        public async Task<TransactionDto?> AddAsync(TransactionCreateDto transactionDto)
         {
             var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == transactionDto.CategoryId);
             if (category is null)
@@ -27,8 +28,8 @@ namespace BudgetKeeper.Services
 
             var record = new Transaction
             {
-                Comment = transactionDto.Name,
-                Amount = transactionDto.Income,
+                Comment = transactionDto.Comment,
+                Amount = transactionDto.Amount,
                 Category = category,
                 CategoryId = category.Id,
                 Time = transactionDto.Time
@@ -36,18 +37,24 @@ namespace BudgetKeeper.Services
 
             await _db.Transactions.AddAsync(record);
             await _db.SaveChangesAsync();
-            return record;
+            return new(record);
         }
 
-        public async Task<List<Transaction>> GetAllAsync() => await _db.Transactions.ToListAsync();
+        public async Task<List<TransactionDto>> GetAllAsync() => await _db.Transactions.Select(t => new TransactionDto(t)).ToListAsync();
 
-        public async Task<Transaction?> GetAsync(Guid id) => await _db.Transactions.FirstOrDefaultAsync(c => c.Id == id);
+        public async Task<TransactionDto?> GetAsync(Guid id)
+        {
+            var transaction = await _db.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+            return transaction == null ? null : new TransactionDto(transaction);
+        }
 
-        public async Task<List<Transaction>> GetAsync(DateTime from, DateTime to) => await _db.Transactions.Where(t => t.Time >= from && t.Time <= to).ToListAsync();
+        public async Task<List<TransactionDto>> GetAsync(DateTime from, DateTime to) => await _db.Transactions.Where(t => t.Time >= from && t.Time <= to)
+            .Select(t => new TransactionDto(t)).ToListAsync();
 
-        public async Task<List<Transaction>> GetAsync(DateTime day) => await _db.Transactions.Where(t => t.Time.Date == day.Date).ToListAsync();
+        public async Task<List<TransactionDto>> GetAsync(DateTime day) => await _db.Transactions.Where(t => t.Time.Date == day.Date)
+            .Select(t => new TransactionDto(t)).ToListAsync();
 
-        public async Task<Transaction?> UpdateAsync(Guid id, TransactionUpdateDto transactionDto)
+        public async Task<TransactionDto?> UpdateAsync(Guid id, TransactionUpdateDto transactionDto)
         {
             var record = await _db.Transactions.FirstOrDefaultAsync(c => c.Id == id);
             var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == transactionDto.CategoryId);
@@ -60,13 +67,13 @@ namespace BudgetKeeper.Services
 
             if (record is not null)
             {
-                record.Comment = transactionDto.Name;
-                record.Amount = transactionDto.Income;
+                record.Comment = transactionDto.Comment;
+                record.Amount = transactionDto.Amount;
                 record.Time = transactionDto.Time;
                 record.Category = category;
                 record.CategoryId = transactionDto.CategoryId;
                 await _db.SaveChangesAsync();
-                return record;
+                return new(record);
             }
             return null;
         }
