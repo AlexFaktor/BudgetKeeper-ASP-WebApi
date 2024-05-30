@@ -1,5 +1,6 @@
 ﻿using BudgetKeeper.Database.Database;
 using BudgetKeeper.Database.Entity;
+using BudgetKeeper.Models.DTO.Transaction;
 using BudgetKeeper.Resource.Interface;
 
 namespace BudgetKeeper.Services
@@ -13,11 +14,28 @@ namespace BudgetKeeper.Services
             _db = db;
         }
 
-        public bool Add(TransactionRecord record)
+        public TransactionRecord? Add(TransactionCreateDto transactionDto)
         {
+            var category = _db.Categories.FirstOrDefault(c => c.Id == transactionDto.CategoryId);
+            if (category is null)
+            {
+                category = _db.Categories.FirstOrDefault(c => c.Name == "Unknown");
+                if (category is null)
+                    return null;
+            }
+
+            var record = new TransactionRecord
+            {
+                Name = transactionDto.Name,
+                Income = transactionDto.Income,
+                Category = category,
+                CategoryId = category.Id,
+                Time = transactionDto.Time
+            };
+
             _db.Transactions.Add(record);
             _db.SaveChanges();
-            return true;
+            return record;
         }
 
         public List<TransactionRecord> GetAll() => _db.Transactions.ToList();
@@ -34,20 +52,28 @@ namespace BudgetKeeper.Services
                       .ToList();
         }
 
-        public bool Update(TransactionRecord record)
+        public TransactionRecord? Update(Guid id,TransactionUpdateDto transactionDto)
         {
-            var existingRecord = _db.Transactions.FirstOrDefault(c => c.Id == record.Id);
-            if (existingRecord != null)
+            var record = _db.Transactions.FirstOrDefault(c => c.Id == id);
+            var category = _db.Categories.FirstOrDefault(c => c.Id == transactionDto.CategoryId);
+            if (category is null)
             {
-                existingRecord.Name = existingRecord.Name;
-                existingRecord.Income = existingRecord.Income;
-                existingRecord.Time = existingRecord.Time;
-                existingRecord.Category = existingRecord.Category;
-                existingRecord.CategoryId = existingRecord.CategoryId;
-                _db.SaveChanges();
-                return true;
+                category = _db.Categories.FirstOrDefault(c => c.Name == "Unknown");
+                if (category is null)
+                    return null;
             }
-            return false;
+
+            if (record is not null)
+            {
+                record.Name = transactionDto.Name;
+                record.Income = transactionDto.Income;
+                record.Time = transactionDto.Time;
+                record.Category = category;
+                record.CategoryId = transactionDto.CategoryId;
+                _db.SaveChanges();
+                return record;
+            }
+            return null;
         }
 
         public bool Delete(Guid id)

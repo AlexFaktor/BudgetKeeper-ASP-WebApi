@@ -1,4 +1,5 @@
 ﻿using BudgetKeeper.Database.Entity;
+using BudgetKeeper.Models.DTO.Transaction;
 using BudgetKeeper.Resource.Interface;
 using BudgetKeeper.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace BudgetKeeper.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet("get-all-transactions")]
+        [HttpGet("all")]
         public async Task<IActionResult> Get()
         {
             var transactions = _transactionService.GetAll();
@@ -40,8 +41,8 @@ namespace BudgetKeeper.Controllers
             return NoContent();
         }
 
-        [HttpGet("get-transactions/{from:datetime}-{to:datetime}")]
-        public async Task<IActionResult> Get([FromRoute] DateTime from, [FromRoute] DateTime to)
+        [HttpGet("period")]
+        public async Task<IActionResult> Get([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
             var transactions = _transactionService.Get(from, to);
 
@@ -51,8 +52,8 @@ namespace BudgetKeeper.Controllers
             return NoContent();
         }
 
-        [HttpGet("get-day-transactions/{day:datetime}")]
-        public async Task<IActionResult> Get([FromRoute] DateTime day)
+        [HttpGet("day")]
+        public async Task<IActionResult> Get([FromQuery] DateTime day)
         {
             var transactions = _transactionService.Get(day);
 
@@ -63,35 +64,29 @@ namespace BudgetKeeper.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TransactionRecord transaction)
+        public async Task<IActionResult> Create([FromBody] TransactionCreateDto transactionDto)
         {
-            if (transaction == null)
+            if (transactionDto is null)
                 return BadRequest();
 
-            if (transaction.Category.Id == Guid.Empty)
-            {
-                var unknownCategory = _categoryService.Get("Unknown");
-                if (unknownCategory == null)
-                    return BadRequest();
+            var record = _transactionService.Add(transactionDto);
 
-                transaction.Category = unknownCategory;
-                transaction.CategoryId = unknownCategory.Id;
-            }
-            
-            if (_transactionService.Add(transaction))
-                return CreatedAtAction(nameof(Get), new { id = transaction.Id }, transaction);
+            if (record is not null)
+                return CreatedAtAction(nameof(Get), new { id = record.Id, record});
 
             return BadRequest();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] TransactionRecord transaction)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] TransactionUpdateDto transactionDto)
         {
-            if (transaction == null || id != transaction.Id)
+            if (transactionDto is null)
                 return BadRequest();
 
-            if (_transactionService.Update(transaction))
-                return Ok(transaction);
+            var record = _transactionService.Update(id ,transactionDto);
+
+            if (record is not null)
+                return Ok(record);
 
             return NotFound();
         }
