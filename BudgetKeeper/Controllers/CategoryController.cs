@@ -43,8 +43,10 @@ namespace BudgetKeeper.Controllers
             if (categoryDto is null)
                 return BadRequest();
 
-            if (_categoryService.Add(categoryDto))
-                return CreatedAtAction(nameof(Get), new { id = categoryDto.Name }, categoryDto);
+            var record = _categoryService.Add(categoryDto);
+
+            if (record is not null)
+                return CreatedAtAction(nameof(Get), new { id = record.Id }, record);
 
             return BadRequest();
         }
@@ -55,8 +57,10 @@ namespace BudgetKeeper.Controllers
             if (category == null)
                 return BadRequest();
 
-            if (_categoryService.Update(id, category))
-                return Ok(category);
+            var record = _categoryService.Update(id, category);
+
+            if (record is not null)
+                return Ok(record);
 
             return NotFound();
         }

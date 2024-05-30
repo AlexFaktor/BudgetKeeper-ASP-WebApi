@@ -14,10 +14,10 @@ namespace BudgetKeeper.Services
             _db = db;
         }
 
-        public bool Add(CategoryCreateDto categoryDto)
+        public CategoryRecord? Add(CategoryCreateDto categoryDto)
         {
             if (Get(categoryDto.Name) != null)
-                return false;
+                return null;
 
             var category = new CategoryRecord
             {
@@ -26,23 +26,23 @@ namespace BudgetKeeper.Services
 
             _db.Categories.Add(category);
             _db.SaveChanges();
-            return true;
+            return Get(category.Name);
         }
 
         public List<CategoryRecord> GetAll() => _db.Categories.ToList();
         public CategoryRecord? Get(Guid id) => _db.Categories.FirstOrDefault(c => c.Id == id);
         public CategoryRecord? Get(string name) => _db.Categories.FirstOrDefault(c => c.Name == name);
 
-        public bool Update(Guid id, CategoryUpdateDto categoryDto)
+        public CategoryRecord? Update(Guid id, CategoryUpdateDto categoryDto)
         {
             var existingRecord = _db.Categories.FirstOrDefault(c => c.Id == id);
             if (existingRecord != null)
             {
                 existingRecord.Name = categoryDto.Name;
                 _db.SaveChanges();
-                return true;
+                return existingRecord;
             }
-            return false;
+            return null;
         }
 
         public bool Delete(Guid id)
