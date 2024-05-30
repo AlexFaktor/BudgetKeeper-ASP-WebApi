@@ -17,7 +17,10 @@ namespace BudgetKeeper.Services
 
         public async Task<Category?> AddAsync(CategoryCreateDto categoryDto)
         {
-            if (await GetAsync(categoryDto.Name) != null)
+            if (categoryDto.Name is null)
+                return null;
+
+            if (await GetAsync(categoryDto.Name) != null) // If a category with this name exists, return null
                 return null;
 
             var category = new Category
@@ -34,10 +37,16 @@ namespace BudgetKeeper.Services
 
         public async Task<Category?> GetAsync(Guid id) => await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
-        public async Task<Category?> GetAsync(string name) => await _db.Categories.FirstOrDefaultAsync(c => c.Name == name);
+        public async Task<Category?> GetAsync(string name) => await _db.Categories.FirstOrDefaultAsync(c => c.Name.ToLower().Trim() == name.ToLower().Trim());
 
         public async Task<Category?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto)
         {
+            if (categoryDto.Name is null)
+                return null;
+
+            if (await GetAsync(categoryDto.Name) != null) // If a category with this name exists, return null
+                return null;
+
             var existingRecord = await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (existingRecord != null)
             {
@@ -53,6 +62,9 @@ namespace BudgetKeeper.Services
             var record = await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (record != null)
             {
+                if (await _db.Transactions.AnyAsync(t => t.CategoryId == id))
+                    return false;
+
                 _db.Categories.Remove(record);
                 await _db.SaveChangesAsync();
                 return true;
