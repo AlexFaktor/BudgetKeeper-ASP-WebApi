@@ -27,7 +27,7 @@ namespace BudgetKeeper.Services
             var record = new TransactionRecord
             {
                 Name = transactionDto.Name,
-                Income = transactionDto.Income,
+                Value = transactionDto.Income,
                 Category = category,
                 CategoryId = category.Id,
                 Time = transactionDto.Time
@@ -66,7 +66,7 @@ namespace BudgetKeeper.Services
             if (record is not null)
             {
                 record.Name = transactionDto.Name;
-                record.Income = transactionDto.Income;
+                record.Value = transactionDto.Income;
                 record.Time = transactionDto.Time;
                 record.Category = category;
                 record.CategoryId = transactionDto.CategoryId;

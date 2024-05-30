@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public decimal Income { get; set; }
+        public decimal Value { get; set; }
 
         public CategoryRecord Category { get; set; } = new();
         public Guid CategoryId { get; set; } = new();

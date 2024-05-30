@@ -15,8 +15,8 @@ namespace BudgetKeeper.Controllers
             _reportService = reportService; 
         }
 
-        [HttpGet("get-day/{day:datetime}")]
-        public async Task<IActionResult> Get([FromRoute] DateTime day)
+        [HttpGet("day")]
+        public async Task<IActionResult> Get([FromQuery] DateTime day)
         {
             var report = _reportService.Get(day);
 
@@ -26,8 +26,8 @@ namespace BudgetKeeper.Controllers
             return Ok(report);
         }
 
-        [HttpGet("get-period/{from:datetime}/{to:datetime}")]
-        public async Task<IActionResult> Get([FromRoute] DateTime from, [FromRoute] DateTime to)
+        [HttpGet("period")] 
+        public async Task<IActionResult> Get([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
             var report = _reportService.Get(from, to);
 

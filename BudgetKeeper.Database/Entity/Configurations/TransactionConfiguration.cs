@@ -13,7 +13,7 @@ namespace BudgetKeeper.Database.Entity.Configurations
                 .IsRequired()
                 .HasMaxLength(32);
 
-            builder.Property(x => x.Income)
+            builder.Property(x => x.Value)
             .IsRequired()
             .HasColumnType("decimal(18,2)");
 

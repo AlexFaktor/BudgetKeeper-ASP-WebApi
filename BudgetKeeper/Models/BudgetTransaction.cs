@@ -6,14 +6,14 @@ namespace BudgetKeeper.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public decimal Income { get; set; }
+        public decimal Value { get; set; }
         public string CategoryName { get; set; }
 
         public BudgetTransaction(TransactionRecord record)
         {
             Id = record.Id;
             Name = record.Name;
-            Income = record.Income;
+            Value = record.Value;
             CategoryName = record.Category.Name;
         }
     }
