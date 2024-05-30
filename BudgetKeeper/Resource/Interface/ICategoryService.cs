@@ -5,12 +5,12 @@ namespace BudgetKeeper.Resource.Interface
 {
     public interface ICategoryService
     {
-        Category? Add(CategoryCreateDto record);
-        List<Category> GetAll();
-        Category? Get(Guid id);
-        Category? Get(string name);
-        Category? Update(Guid id, CategoryUpdateDto record);
-        bool Delete(Guid id);
-
+        Task<Category?> AddAsync(CategoryCreateDto categoryDto);
+        Task<List<Category>> GetAllAsync();
+        Task<Category?> GetAsync(Guid id);
+        Task<Category?> GetAsync(string name);
+        Task<Category?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto);
+        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(Category record);
     }
 }

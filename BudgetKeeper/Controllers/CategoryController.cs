@@ -1,8 +1,6 @@
-using BudgetKeeper.Database.Entity;
 using BudgetKeeper.Models.DTO.Category;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 
 namespace BudgetKeeper.Controllers
 {
@@ -21,7 +19,7 @@ namespace BudgetKeeper.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> Get()
         {
-            var categorys = _categoryService.GetAll();
+            var categorys = await _categoryService.GetAllAsync();
 
             return Ok(categorys);
         }
@@ -29,7 +27,7 @@ namespace BudgetKeeper.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var category = _categoryService.Get(id);
+            var category = await _categoryService.GetAsync(id);
 
             if (category != null)
                 return Ok(category);
@@ -43,7 +41,7 @@ namespace BudgetKeeper.Controllers
             if (categoryDto is null)
                 return BadRequest();
 
-            var record = _categoryService.Add(categoryDto);
+            var record = await _categoryService.AddAsync(categoryDto);
 
             if (record is not null)
                 return CreatedAtAction(nameof(Get), new { id = record.Id }, record);
@@ -57,7 +55,7 @@ namespace BudgetKeeper.Controllers
             if (category == null)
                 return BadRequest();
 
-            var record = _categoryService.Update(id, category);
+            var record = await _categoryService.UpdateAsync(id, category);
 
             if (record is not null)
                 return Ok(record);
@@ -68,10 +66,10 @@ namespace BudgetKeeper.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            if (_categoryService.Delete(id))
+            if (await _categoryService.DeleteAsync(id))
                 return NoContent();
 
-            return BadRequest();    
+            return BadRequest();
         }
     }
 }

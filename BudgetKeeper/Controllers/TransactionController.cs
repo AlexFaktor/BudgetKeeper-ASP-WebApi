@@ -1,7 +1,5 @@
-﻿using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.Transaction;
+﻿using BudgetKeeper.Models.DTO.Transaction;
 using BudgetKeeper.Resource.Interface;
-using BudgetKeeper.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetKeeper.Controllers
@@ -22,45 +20,34 @@ namespace BudgetKeeper.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> Get()
         {
-            var transactions = _transactionService.GetAll();
-
-            if (transactions.Count != 0) 
-                return Ok(transactions);
-
-            return NoContent();
+            var transactions = await _transactionService.GetAllAsync();
+            return Ok(transactions);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var transaction = _transactionService.Get(id);
+            var transaction = await _transactionService.GetAsync(id);
+            if (transaction == null)
+                return NotFound();
 
-            if (transaction != null)
-                return Ok(transaction);
-
-            return NoContent();
+            return Ok(transaction);
         }
 
         [HttpGet("period")]
         public async Task<IActionResult> Get([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
-            var transactions = _transactionService.Get(from, to);
+            var transactions = await _transactionService.GetAsync(from, to);
 
-            if (transactions != null && transactions.Any())
-                return Ok(transactions);
-
-            return NoContent();
+            return Ok(transactions);
         }
 
         [HttpGet("day")]
         public async Task<IActionResult> Get([FromQuery] DateTime day)
         {
-            var transactions = _transactionService.Get(day);
+            var transactions = await _transactionService.GetAsync(day);
 
-            if (transactions != null && transactions.Any())
-                return Ok(transactions);
-
-            return NoContent();
+            return Ok(transactions);
         }
 
         [HttpPost]
@@ -69,12 +56,12 @@ namespace BudgetKeeper.Controllers
             if (transactionDto is null)
                 return BadRequest();
 
-            var record = _transactionService.Add(transactionDto);
+            var record = await _transactionService.AddAsync(transactionDto);
 
-            if (record is not null)
-                return CreatedAtAction(nameof(Get), new { id = record.Id, record});
+            if (record is null)
+                return BadRequest();
 
-            return BadRequest();
+            return CreatedAtAction(nameof(Get), new { id = record.Id }, record);
         }
 
         [HttpPut("{id}")]
@@ -83,18 +70,18 @@ namespace BudgetKeeper.Controllers
             if (transactionDto is null)
                 return BadRequest();
 
-            var record = _transactionService.Update(id ,transactionDto);
+            var record = await _transactionService.UpdateAsync(id, transactionDto);
 
-            if (record is not null)
-                return Ok(record);
+            if (record is null)
+                return NotFound();
 
-            return NotFound();
+            return Ok(record);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            if (_transactionService.Delete(id))
+            if (await _transactionService.DeleteAsync(id))
                 return NoContent();
 
             return NotFound();

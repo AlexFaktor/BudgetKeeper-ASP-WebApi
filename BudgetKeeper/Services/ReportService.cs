@@ -13,17 +13,17 @@ namespace BudgetKeeper.Services
             _transactionService = new(db);
         }
         
-        public BudgetReport? Get(DateTime day)
+        public async Task<BudgetReport?> GetAsync(DateTime day)
         {
             DateTime dayStart = day.Date;
             DateTime dayEnd = day.Date.AddDays(1).AddTicks(-1);
 
-            return Get(dayStart, dayEnd);
+            return await GetAsync(dayStart, dayEnd);
         }
 
-        public BudgetReport? Get(DateTime from, DateTime to)
+        public async Task<BudgetReport?> GetAsync(DateTime from, DateTime to)
         {
-            var transactions = _transactionService.Get(from, to);
+            var transactions = await _transactionService.GetAsync(from, to);
             if (transactions.Count < 1)
                 return null;
             return new BudgetReport(transactions);

@@ -1,5 +1,4 @@
-﻿using BudgetKeeper.Models;
-using BudgetKeeper.Resource.Interface;
+﻿using BudgetKeeper.Resource.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetKeeper.Controllers
@@ -12,13 +11,13 @@ namespace BudgetKeeper.Controllers
 
         public ReportController(IReportService reportService)
         {
-            _reportService = reportService; 
+            _reportService = reportService;
         }
 
         [HttpGet("day")]
         public async Task<IActionResult> Get([FromQuery] DateTime day)
         {
-            var report = _reportService.Get(day);
+            var report = await _reportService.GetAsync(day);
 
             if (report == null)
                 return NotFound();
@@ -26,10 +25,10 @@ namespace BudgetKeeper.Controllers
             return Ok(report);
         }
 
-        [HttpGet("period")] 
+        [HttpGet("period")]
         public async Task<IActionResult> Get([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
-            var report = _reportService.Get(from, to);
+            var report = await _reportService.GetAsync(from, to);
 
             if (report == null)
                 return NotFound();

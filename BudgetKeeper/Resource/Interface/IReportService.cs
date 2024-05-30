@@ -4,7 +4,7 @@ namespace BudgetKeeper.Resource.Interface
 {
     public interface IReportService
     {
-        public BudgetReport? Get(DateTime day);
-        public BudgetReport? Get(DateTime from, DateTime to);
+        public Task<BudgetReport?> GetAsync(DateTime day);
+        public Task<BudgetReport?> GetAsync(DateTime from, DateTime to);
     }
 }

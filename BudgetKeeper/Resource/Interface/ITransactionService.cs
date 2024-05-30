@@ -5,13 +5,13 @@ namespace BudgetKeeper.Resource.Interface
 {
     public interface ITransactionService
     {
-        Transaction? Add(TransactionCreateDto record);
-        List<Transaction> GetAll();
-        Transaction? Get(Guid id);
-        List<Transaction> Get(DateTime from, DateTime to);
-        List<Transaction> Get(DateTime day);
-        Transaction? Update(Guid id,TransactionUpdateDto record);
-        bool Delete(Guid id);
-        bool Delete(Transaction record);
+        Task<Transaction?> AddAsync(TransactionCreateDto record);
+        Task<List<Transaction>> GetAllAsync();
+        Task<Transaction?> GetAsync(Guid id);
+        Task<List<Transaction>> GetAsync(DateTime from, DateTime to);
+        Task<List<Transaction>> GetAsync(DateTime day);
+        Task<Transaction?> UpdateAsync(Guid id,TransactionUpdateDto record);
+        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(Transaction record);
     }
 }

@@ -2,6 +2,7 @@
 using BudgetKeeper.Database.Entity;
 using BudgetKeeper.Models.DTO.Category;
 using BudgetKeeper.Resource.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetKeeper.Services
 {
@@ -10,13 +11,13 @@ namespace BudgetKeeper.Services
         private readonly BudgetDbContext _db;
 
         public CategoryService(BudgetDbContext db)
-        { 
+        {
             _db = db;
         }
 
-        public Category? Add(CategoryCreateDto categoryDto)
+        public async Task<Category?> AddAsync(CategoryCreateDto categoryDto)
         {
-            if (Get(categoryDto.Name) != null)
+            if (await GetAsync(categoryDto.Name) != null)
                 return null;
 
             var category = new Category
@@ -24,42 +25,45 @@ namespace BudgetKeeper.Services
                 Name = categoryDto.Name
             };
 
-            _db.Categories.Add(category);
-            _db.SaveChanges();
-            return Get(category.Name);
+            await _db.Categories.AddAsync(category);
+            await _db.SaveChangesAsync();
+            return await GetAsync(category.Name);
         }
 
-        public List<Category> GetAll() => _db.Categories.ToList();
-        public Category? Get(Guid id) => _db.Categories.FirstOrDefault(c => c.Id == id);
-        public Category? Get(string name) => _db.Categories.FirstOrDefault(c => c.Name == name);
+        public async Task<List<Category>> GetAllAsync() => await _db.Categories.ToListAsync();
 
-        public Category? Update(Guid id, CategoryUpdateDto categoryDto)
+        public async Task<Category?> GetAsync(Guid id) => await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
+
+        public async Task<Category?> GetAsync(string name) => await _db.Categories.FirstOrDefaultAsync(c => c.Name == name);
+
+        public async Task<Category?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto)
         {
-            var existingRecord = _db.Categories.FirstOrDefault(c => c.Id == id);
+            var existingRecord = await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (existingRecord != null)
             {
                 existingRecord.Name = categoryDto.Name;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return existingRecord;
             }
             return null;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var record = _db.Categories.FirstOrDefault(c => c.Id == id);
+            var record = await _db.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (record != null)
             {
                 _db.Categories.Remove(record);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public bool Delete(Category record)
+        public async Task<bool> DeleteAsync(Category record)
         {
-            return Delete(record.Id);
+            return await DeleteAsync(record.Id);
         }
     }
+
 }
