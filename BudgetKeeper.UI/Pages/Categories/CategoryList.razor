@@ -1,0 +1,50 @@
+﻿@page "/categories"
+@using BudgetKeeper.Models.DTO.CategoryDtos
+@using BudgetKeeper.UI.Services
+
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@code {
+    private List<CategoryDto> Categories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await CategoryService.GetAllAsync();
+    }
+
+    private void EditCategory(Guid id)
+    {
+        // Navigate to the edit page
+        NavigationManager.NavigateTo($"/categories/edit/{id}");
+    }
+
+    private async Task DeleteCategory(Guid id)
+    {
+        await CategoryService.DeleteAsync(id);
+        Categories = await CategoryService.GetAllAsync();
+    }
+}
+
+<h3>Categories</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Categories)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>
+                    <button type="button" class="btn btn-primary" @onclick="() => EditCategory(category.Id)">Edit</button>
+                    <button type="button" class="btn btn-danger" @onclick="() => DeleteCategory(category.Id)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

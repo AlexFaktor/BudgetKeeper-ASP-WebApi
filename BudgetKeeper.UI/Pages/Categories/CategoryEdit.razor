@@ -1,0 +1,56 @@
+﻿@page "/categories/edit/{Id:guid}"
+@page "/categories/create"
+@using BudgetKeeper.Models.DTO.CategoryDtos
+@using BudgetKeeper.UI.Services
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+
+    private CategoryDto category = new CategoryDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            category = await CategoryService.GetAsync(Id.Value);
+        }
+    }
+
+    private async Task SaveCategory()
+    {
+        if (Id.HasValue)
+        {
+            await CategoryService.UpdateAsync(Id.Value, new CategoryUpdateDto { Name = category.Name });
+        }
+        else
+        {
+            await CategoryService.CreateAsync(new CategoryCreateDto { Name = category.Name });
+        }
+
+        NavigationManager.NavigateTo("/categories");
+    }
+}
+
+<h3>@(Id.HasValue ? "Edit Category" : "Create Category")</h3>
+
+<EditForm Model="category" OnValidSubmit="SaveCategory">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="category.Name" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="() => NavigateToCategories()">Cancel</button>
+</EditForm>
+
+@code {
+    private void NavigateToCategories()
+    {
+        NavigationManager.NavigateTo("/categories");
+    }
+}
