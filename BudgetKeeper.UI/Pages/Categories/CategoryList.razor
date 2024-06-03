@@ -1,7 +1,6 @@
 ﻿@page "/categories"
 @using BudgetKeeper.Models.DTO.CategoryDtos
 @using BudgetKeeper.UI.Services
-
 @inject CategoryService CategoryService
 @inject NavigationManager NavigationManager
 
@@ -13,9 +12,13 @@
         Categories = await CategoryService.GetAllAsync();
     }
 
+    private void CreateCategory()
+    {
+        NavigationManager.NavigateTo("/categories/create");
+    }
+
     private void EditCategory(Guid id)
     {
-        // Navigate to the edit page
         NavigationManager.NavigateTo($"/categories/edit/{id}");
     }
 
@@ -26,6 +29,7 @@
     }
 }
 
+<button type="button" class="btn btn-primary m-2" @onclick="() => CreateCategory()">Create</button>
 <h3>Categories</h3>
 
 <table class="table">
@@ -35,7 +39,7 @@
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody> 
         @foreach (var category in Categories)
         {
             <tr>

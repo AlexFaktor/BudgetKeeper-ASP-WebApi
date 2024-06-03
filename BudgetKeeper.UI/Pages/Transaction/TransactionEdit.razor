@@ -1,0 +1,81 @@
+﻿@page "/transactions/edit/{id:guid}"
+@using BudgetKeeper.Models.DTO.CategoryDtos
+@using BudgetKeeper.Models.DTO.TransactionDtos
+@using BudgetKeeper.UI.Services
+@inject TransactionService TransactionService
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private TransactionUpdateDto transaction = new();
+    private List<CategoryDto> categories = new List<CategoryDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await CategoryService.GetAllAsync();
+        var dto = await TransactionService.GetAsync(Id);
+        transaction = new TransactionUpdateDto
+            {
+                Comment = dto.Comment,
+                CategoryId = dto.CategoryId,
+                Time = dto.Time,
+                Amount = dto.Amount
+            };
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (transaction.CategoryId == Guid.Empty)
+        {
+            return;
+        }
+
+        try
+        {
+            await TransactionService.UpdateAsync(Id, transaction);
+            NavigationManager.NavigateTo("/transactions");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating transaction: {ex.Message}");
+        }
+    }
+}
+
+<EditForm Model="@transaction" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <InputText id="comment" class="form-control" @bind-Value="transaction.Comment" />
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <InputSelect id="category" class="form-control" @bind-Value="transaction.CategoryId">
+            <option value="">Select a category</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </InputSelect>
+        @if (string.IsNullOrEmpty(transaction.CategoryId.ToString()) || transaction.CategoryId == Guid.Empty)
+        {
+            <div class="text-danger">Category is required.</div>
+        }
+    </div>
+    <div class="form-group">
+        <label for="time">Date</label>
+        <input type="datetime-local" id="time" class="form-control" @bind="transaction.Time" />
+    </div>
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber id="amount" class="form-control" @bind-Value="transaction.Amount" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+</EditForm>
+

@@ -18,6 +18,8 @@ namespace BudgetKeeper.UI
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BudgetKeeperApi"));
 
             builder.Services.AddScoped<CategoryService>();
+            builder.Services.AddScoped<TransactionService>();
+            builder.Services.AddScoped<ReportService>();
 
             var app = builder.Build();
 
