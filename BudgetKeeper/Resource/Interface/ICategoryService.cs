@@ -1,5 +1,5 @@
-﻿using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.CategoryDtos;
+﻿using BudgetKeeper.Core.CategoryDtos;
+using BudgetKeeper.Database.Entity;
 
 namespace BudgetKeeper.Resource.Interface
 {

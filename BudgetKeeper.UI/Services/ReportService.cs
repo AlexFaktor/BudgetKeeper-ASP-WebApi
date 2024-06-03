@@ -1,8 +1,4 @@
-﻿using BudgetKeeper.Models;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using System;
+﻿using BudgetKeeper.Core.BudgetReportDtos;
 
 namespace BudgetKeeper.UI.Services
 {
@@ -15,13 +11,13 @@ namespace BudgetKeeper.UI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<BudgetReport> GetDayReportAsync(DateTime day)
+        public async Task<BudgetReportDto> GetDayReportAsync(DateTime day)
         {
             try
             {
                 var response = await _httpClient.GetAsync($"api/report/day?day={day:yyyy-MM-dd}");
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadFromJsonAsync<BudgetReport>();
+                return await response.Content.ReadFromJsonAsync<BudgetReportDto>();
             }
             catch (HttpRequestException ex)
             {
@@ -35,13 +31,13 @@ namespace BudgetKeeper.UI.Services
             }
         }
 
-        public async Task<BudgetReport> GetPeriodReportAsync(DateTime from, DateTime to)
+        public async Task<BudgetReportDto> GetPeriodReportAsync(DateTime from, DateTime to)
         {
             try
             {
                 var response = await _httpClient.GetAsync($"api/report/period?from={from:yyyy-MM-dd}&to={to:yyyy-MM-dd}");
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadFromJsonAsync<BudgetReport>();
+                return await response.Content.ReadFromJsonAsync<BudgetReportDto>();
             }
             catch (HttpRequestException ex)
             {

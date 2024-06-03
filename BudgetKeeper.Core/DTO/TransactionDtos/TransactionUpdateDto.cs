@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BudgetKeeper.Models.DTO.TransactionDtos
+namespace BudgetKeeper.Core.TransactionDtos
 {
     public class TransactionUpdateDto
     {

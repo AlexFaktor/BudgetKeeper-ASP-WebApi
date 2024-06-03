@@ -1,4 +1,4 @@
-﻿using BudgetKeeper.Models.DTO.TransactionDtos;
+﻿using BudgetKeeper.Core.TransactionDtos;
 
 namespace BudgetKeeper.UI.Services
 {

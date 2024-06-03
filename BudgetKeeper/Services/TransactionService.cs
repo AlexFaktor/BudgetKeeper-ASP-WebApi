@@ -1,7 +1,6 @@
-﻿using BudgetKeeper.Database.Database;
+﻿using BudgetKeeper.Core.TransactionDtos;
+using BudgetKeeper.Database.Database;
 using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.CategoryDtos;
-using BudgetKeeper.Models.DTO.TransactionDtos;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.EntityFrameworkCore;
 

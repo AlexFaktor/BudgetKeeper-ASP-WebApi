@@ -1,10 +1,10 @@
-﻿using BudgetKeeper.Models;
+﻿using BudgetKeeper.Core.BudgetReportDtos;
 
 namespace BudgetKeeper.Resource.Interface
 {
     public interface IReportService
     {
-        public Task<BudgetReport?> GetAsync(DateTime day);
-        public Task<BudgetReport?> GetAsync(DateTime from, DateTime to);
+        public Task<BudgetReportDto?> GetAsync(DateTime day);
+        public Task<BudgetReportDto?> GetAsync(DateTime from, DateTime to);
     }
 }

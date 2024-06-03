@@ -1,5 +1,5 @@
-﻿using BudgetKeeper.Database.Database;
-using BudgetKeeper.Models;
+﻿using BudgetKeeper.Core.BudgetReportDtos;
+using BudgetKeeper.Database.Database;
 using BudgetKeeper.Resource.Interface;
 
 namespace BudgetKeeper.Services
@@ -12,8 +12,8 @@ namespace BudgetKeeper.Services
         {
             _transactionService = new(db);
         }
-        
-        public async Task<BudgetReport?> GetAsync(DateTime day)
+
+        public async Task<BudgetReportDto?> GetAsync(DateTime day)
         {
             DateTime dayStart = day.Date;
             DateTime dayEnd = day.Date.AddDays(1).AddTicks(-1);
@@ -21,12 +21,12 @@ namespace BudgetKeeper.Services
             return await GetAsync(dayStart, dayEnd);
         }
 
-        public async Task<BudgetReport?> GetAsync(DateTime from, DateTime to)
+        public async Task<BudgetReportDto?> GetAsync(DateTime from, DateTime to)
         {
             var transactions = await _transactionService.GetAsync(from, to);
             if (transactions.Count < 1)
                 return null;
-            return new BudgetReport(transactions);
+            return new BudgetReportDto(transactions);
         }
     }
 }

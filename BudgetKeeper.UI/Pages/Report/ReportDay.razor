@@ -1,7 +1,6 @@
 ﻿@page "/report/day"
-@using BudgetKeeper.Models
-@using BudgetKeeper.Models.DTO.CategoryDtos
-@using BudgetKeeper.Models.DTO.TransactionDtos
+@using BudgetKeeper.Core.BudgetReportDtos
+@using BudgetKeeper.Core.CategoryDtos
 @using BudgetKeeper.UI.Services
 @inject ReportService ReportService
 @inject CategoryService CategoryService
@@ -12,7 +11,7 @@
 
     public DateTime day { get; set; } = DateTime.Now;
 
-    private BudgetReport report = new();
+    private BudgetReportDto report = new();
     private string errorMessage = string.Empty;
 
     protected override async Task OnInitializedAsync()

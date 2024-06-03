@@ -1,4 +1,4 @@
-using BudgetKeeper.Models.DTO.CategoryDtos;
+using BudgetKeeper.Core.CategoryDtos;
 using BudgetKeeper.Resource.Interface;
 using Microsoft.AspNetCore.Mvc;
 

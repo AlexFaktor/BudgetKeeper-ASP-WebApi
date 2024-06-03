@@ -1,13 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BudgetKeeper.Core\BudgetKeeper.Core.csproj" />
+    <ProjectReference Include="..\BudgetKeeper.Database\BudgetKeeper.Database.csproj" />
   </ItemGroup>
 
 </Project>

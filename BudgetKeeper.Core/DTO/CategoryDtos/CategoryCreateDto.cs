@@ -1,4 +1,4 @@
-﻿namespace BudgetKeeper.Models.DTO.CategoryDtos
+﻿namespace BudgetKeeper.Core.CategoryDtos
 {
     public class CategoryCreateDto
     {

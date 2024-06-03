@@ -1,4 +1,4 @@
-﻿using BudgetKeeper.Models.DTO.CategoryDtos;
+﻿using BudgetKeeper.Core.CategoryDtos;
 
 namespace BudgetKeeper.UI.Services
 {

@@ -1,6 +1,6 @@
 ﻿using BudgetKeeper.Database.Entity;
 
-namespace BudgetKeeper.Models.DTO.TransactionDtos
+namespace BudgetKeeper.Core.TransactionDtos
 {
     public class TransactionDto
     {
@@ -11,7 +11,7 @@ namespace BudgetKeeper.Models.DTO.TransactionDtos
         public Guid CategoryId { get; set; }
 
         public TransactionDto()
-        { 
+        {
         }
 
         public TransactionDto(Transaction record)

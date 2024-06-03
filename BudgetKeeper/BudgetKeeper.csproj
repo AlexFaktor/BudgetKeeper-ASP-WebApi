@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BudgetKeeper.Core\BudgetKeeper.Core.csproj" />
     <ProjectReference Include="..\BudgetKeeper.Database\BudgetKeeper.Database.csproj" />
   </ItemGroup>
 

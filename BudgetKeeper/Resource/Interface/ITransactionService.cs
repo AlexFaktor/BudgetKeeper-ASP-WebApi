@@ -1,5 +1,5 @@
-﻿using BudgetKeeper.Database.Entity;
-using BudgetKeeper.Models.DTO.TransactionDtos;
+﻿using BudgetKeeper.Core.TransactionDtos;
+using BudgetKeeper.Database.Entity;
 
 namespace BudgetKeeper.Resource.Interface
 {
@@ -10,7 +10,7 @@ namespace BudgetKeeper.Resource.Interface
         Task<TransactionDto?> GetAsync(Guid id);
         Task<List<TransactionDto>> GetAsync(DateTime from, DateTime to);
         Task<List<TransactionDto>> GetAsync(DateTime day);
-        Task<TransactionDto?> UpdateAsync(Guid id,TransactionUpdateDto record);
+        Task<TransactionDto?> UpdateAsync(Guid id, TransactionUpdateDto record);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> DeleteAsync(Transaction record);
     }

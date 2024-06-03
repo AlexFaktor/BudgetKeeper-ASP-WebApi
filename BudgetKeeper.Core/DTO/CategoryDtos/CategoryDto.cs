@@ -1,8 +1,6 @@
-﻿
+﻿using BudgetKeeper.Database.Entity;
 
-using BudgetKeeper.Database.Entity;
-
-namespace BudgetKeeper.Models.DTO.CategoryDtos
+namespace BudgetKeeper.Core.CategoryDtos
 {
     public class CategoryDto
     {
@@ -10,11 +8,11 @@ namespace BudgetKeeper.Models.DTO.CategoryDtos
         public string Name { get; set; } = string.Empty;
 
         public CategoryDto()
-        { 
+        {
         }
-        
+
         public CategoryDto(Category record)
-        { 
+        {
             Id = record.Id;
             Name = record.Name;
         }
