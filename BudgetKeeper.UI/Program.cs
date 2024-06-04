@@ -23,9 +23,17 @@ namespace BudgetKeeper.UI
 
                 builder.Services.AddRazorPages();
                 builder.Services.AddServerSideBlazor();
+
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                var baseUrl = configuration.GetSection("ApiSettings")["BaseUrl"];
+
                 builder.Services.AddHttpClient("BudgetKeeperApi", client =>
                 {
-                    client.BaseAddress = new Uri("http://localhost:5071/");
+                    client.BaseAddress = new Uri(baseUrl);
                 });
                 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BudgetKeeperApi"));
 
