@@ -5,13 +5,15 @@ namespace BudgetKeeper.UI.Services
     public class CategoryService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<ReportService> _logger;
 
-        public CategoryService(HttpClient httpClient)
+        public CategoryService(HttpClient httpClient, ILogger<ReportService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
-        public async Task<List<CategoryDto>> GetAllAsync()
+        public async Task<List<CategoryDto>?> GetAllAsync()
         {
             try
             {
@@ -21,12 +23,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching categories: {ex.Message}");
+                _logger.LogError(ex, "Error fetching categories");
                 return new List<CategoryDto>();
             }
         }
 
-        public async Task<CategoryDto> GetAsync(Guid id)
+        public async Task<CategoryDto?> GetAsync(Guid id)
         {
             try
             {
@@ -36,12 +38,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching category with ID {id}: {ex.Message}");
+                _logger.LogError(ex, "Error fetching category with ID {CategoryId}", id);
                 return null;
             }
         }
 
-        public async Task<CategoryDto> CreateAsync(CategoryCreateDto categoryDto)
+        public async Task<CategoryDto?> CreateAsync(CategoryCreateDto categoryDto)
         {
             try
             {
@@ -51,12 +53,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating category: {ex.Message}");
+                _logger.LogError(ex, "Error creating category");
                 return null;
             }
         }
 
-        public async Task<CategoryDto> UpdateAsync(Guid id, CategoryUpdateDto categoryDto)
+        public async Task<CategoryDto?> UpdateAsync(Guid id, CategoryUpdateDto categoryDto)
         {
             try
             {
@@ -66,7 +68,7 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating category with ID {id}: {ex.Message}");
+                _logger.LogError(ex, "Error updating category with ID {CategoryId}", id);
                 return null;
             }
         }
@@ -80,7 +82,7 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting category with ID {id}: {ex.Message}");
+                _logger.LogError(ex, "Error deleting category with ID {CategoryId}", id);
             }
         }
     }

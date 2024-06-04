@@ -11,7 +11,7 @@
     public Guid Id { get; set; }
 
     private TransactionUpdateDto transaction = new();
-    private List<CategoryDto> categories = new List<CategoryDto>();
+    private List<CategoryDto>? categories = new List<CategoryDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -19,7 +19,7 @@
         var dto = await TransactionService.GetAsync(Id);
         transaction = new TransactionUpdateDto
             {
-                Comment = dto.Comment,
+                Comment = dto!.Comment,
                 CategoryId = dto.CategoryId,
                 Time = dto.Time,
                 Amount = dto.Amount

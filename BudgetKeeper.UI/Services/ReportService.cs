@@ -5,13 +5,15 @@ namespace BudgetKeeper.UI.Services
     public class ReportService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<ReportService> _logger;
 
-        public ReportService(HttpClient httpClient)
+        public ReportService(HttpClient httpClient, ILogger<ReportService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
-        public async Task<BudgetReportDto> GetDayReportAsync(DateTime day)
+        public async Task<BudgetReportDto?> GetDayReportAsync(DateTime day)
         {
             try
             {
@@ -21,17 +23,17 @@ namespace BudgetKeeper.UI.Services
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Error fetching day report: {ex.Message}");
+                _logger.LogError($"Error fetching day report: {ex.Message}");
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
+                _logger.LogError($"Unexpected error: {ex.Message}");
                 return null;
             }
         }
 
-        public async Task<BudgetReportDto> GetPeriodReportAsync(DateTime from, DateTime to)
+        public async Task<BudgetReportDto?> GetPeriodReportAsync(DateTime from, DateTime to)
         {
             try
             {
@@ -41,12 +43,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Error fetching period report: {ex.Message}");
+                _logger.LogError($"Error fetching period report: {ex.Message}");
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
+                _logger.LogError($"Unexpected error: {ex.Message}");
                 return null;
             }
         }

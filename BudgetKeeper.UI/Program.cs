@@ -1,4 +1,6 @@
 using BudgetKeeper.UI.Services;
+using Serilog;
+
 
 namespace BudgetKeeper.UI
 {
@@ -6,41 +8,62 @@ namespace BudgetKeeper.UI
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .CreateLogger();
 
-            // Add services to the container.
-            builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
-            builder.Services.AddHttpClient("BudgetKeeperApi", client =>
+            try
             {
-                client.BaseAddress = new Uri("http://localhost:5071/");
-            });
-            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BudgetKeeperApi"));
+                Log.Information("Starting web host");
 
-            builder.Services.AddScoped<CategoryService>();
-            builder.Services.AddScoped<TransactionService>();
-            builder.Services.AddScoped<ReportService>();
+                var builder = WebApplication.CreateBuilder(args);
 
-            var app = builder.Build();
+                builder.Host.UseSerilog();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                builder.Services.AddRazorPages();
+                builder.Services.AddServerSideBlazor();
+                builder.Services.AddHttpClient("BudgetKeeperApi", client =>
+                {
+                    client.BaseAddress = new Uri("http://localhost:5071/");
+                });
+                builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BudgetKeeperApi"));
+
+                builder.Services.AddSingleton(Log.Logger);
+
+                builder.Services.AddScoped<CategoryService>();
+                builder.Services.AddScoped<TransactionService>();
+                builder.Services.AddScoped<ReportService>();
+
+                var app = builder.Build();
+
+                // Configure the HTTP request pipeline.
+                if (!app.Environment.IsDevelopment())
+                {
+                    app.UseExceptionHandler("/Error");
+                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseHsts();
+                }
+
+                app.UseHttpsRedirection();
+
+                app.UseStaticFiles();
+
+                app.UseRouting();
+
+                app.MapBlazorHub();
+                app.MapFallbackToPage("/_Host");
+
+                app.Run();
             }
-
-            app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.MapBlazorHub();
-            app.MapFallbackToPage("/_Host");
-
-            app.Run();
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }

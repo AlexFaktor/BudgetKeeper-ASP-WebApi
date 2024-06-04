@@ -8,12 +8,12 @@
 
 @code {
     private TransactionCreateDto transaction = new TransactionCreateDto();
-    private List<CategoryDto> categories = new List<CategoryDto>();
+    private List<CategoryDto>? categories = new List<CategoryDto>();
 
     protected override async Task OnInitializedAsync()
     {
         categories = await CategoryService.GetAllAsync();
-        transaction.CategoryId = categories.Last().Id;
+        transaction.CategoryId = categories!.Last().Id;
     }
 
     private async Task HandleValidSubmit()

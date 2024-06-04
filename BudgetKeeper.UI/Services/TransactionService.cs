@@ -5,10 +5,12 @@ namespace BudgetKeeper.UI.Services
     public class TransactionService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<ReportService> _logger;
 
-        public TransactionService(HttpClient httpClient)
+        public TransactionService(HttpClient httpClient, ILogger<ReportService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task<List<TransactionDto>> GetAllAsync()
@@ -20,12 +22,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching all transactions: {ex.Message}");
+                _logger.LogError($"Error fetching all transactions: {ex.Message}");
                 return new List<TransactionDto>();
             }
         }
 
-        public async Task<TransactionDto> GetAsync(Guid id)
+        public async Task<TransactionDto?> GetAsync(Guid id)
         {
             try
             {
@@ -38,7 +40,7 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching transaction with ID {id}: {ex.Message}");
+                _logger.LogError($"Error fetching transaction with ID {id}: {ex.Message}");
                 return null;
             }
         }
@@ -57,7 +59,7 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching transactions by period: {ex.Message}");
+                _logger.LogError($"Error fetching transactions by period: {ex.Message}");
                 return new List<TransactionDto>();
             }
         }
@@ -71,12 +73,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching transactions for day {day:O}: {ex.Message}");
+                _logger.LogError($"Error fetching transactions for day {day:O}: {ex.Message}");
                 return new List<TransactionDto>();
             }
         }
 
-        public async Task<TransactionDto> CreateAsync(TransactionCreateDto transactionDto)
+        public async Task<TransactionDto?> CreateAsync(TransactionCreateDto transactionDto)
         {
             try
             {
@@ -92,12 +94,12 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating transaction: {ex.Message}");
+                _logger.LogError($"Error creating transaction: {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<TransactionDto> UpdateAsync(Guid id, TransactionUpdateDto transactionDto)
+        public async Task<TransactionDto?> UpdateAsync(Guid id, TransactionUpdateDto transactionDto)
         {
             try
             {
@@ -117,7 +119,7 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating transaction with ID {id}: {ex.Message}");
+                _logger.LogError($"Error updating transaction with ID {id}: {ex.Message}");
                 throw;
             }
         }
@@ -136,7 +138,7 @@ namespace BudgetKeeper.UI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting transaction with ID {id}: {ex.Message}");
+                _logger.LogError($"Error deleting transaction with ID {id}: {ex.Message}");
                 throw;
             }
         }
