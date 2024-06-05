@@ -14,7 +14,7 @@ namespace BudgetKeeper
             // Add services to the container.
 
             builder.Services.AddDbContext<BudgetDbContext>(options =>
-                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IReportService, ReportService>();

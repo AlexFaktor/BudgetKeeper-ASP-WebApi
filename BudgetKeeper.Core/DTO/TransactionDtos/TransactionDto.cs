@@ -8,7 +8,7 @@ namespace BudgetKeeper.Core.TransactionDtos
         public string Comment { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public DateTime Time { get; set; } = DateTime.UtcNow;
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
 
         public TransactionDto()
         {

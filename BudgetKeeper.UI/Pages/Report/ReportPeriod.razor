@@ -36,7 +36,7 @@
         }
     }
 
-    private string? GetCategory(Guid id)
+    private string? GetCategory(Guid? id)
     {
         return Categorys!.First(c => c.Id == id).Name ?? "Unknown";
     }

@@ -7,7 +7,7 @@
         public decimal Amount { get; set; }
 
         public Category Category { get; set; } = new();
-        public Guid CategoryId { get; set; } = new();
+        public Guid? CategoryId { get; set; } = new();
 
         public DateTime Time { get; set; } = DateTime.UtcNow;
     } 

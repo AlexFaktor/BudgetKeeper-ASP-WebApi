@@ -10,7 +10,7 @@ namespace BudgetKeeper.Core.TransactionDtos
         public decimal Amount { get; set; }
 
         [Required(ErrorMessage = "Category is required.")]
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
 
         [Required(ErrorMessage = "Date is required.")]
         public DateTime Time { get; set; } = DateTime.UtcNow;
