@@ -1,17 +1,17 @@
 {
   "dependencies": {
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DefaultConnection"
+    },
     "apis1": {
-      "type": "apis"
+      "ignored": "true",
+      "type": "apis.azure"
     },
     "secrets1": {
-      "type": "secrets",
-      "connectionId": "VaultUri",
-      "dynamicId": null
-    },
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:DefaultConnection",
-      "dynamicId": null
+      "ignored": "true",
+      "type": "secrets.keyVault"
     }
   }
 }
