@@ -1,0 +1,72 @@
+﻿@page "/transactions/create"
+@using BudgetKeeper.Core.CategoryDtos
+@using BudgetKeeper.Core.TransactionDtos
+@using BudgetKeeper.UI.Services
+@inject TransactionService TransactionService
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@code {
+    private TransactionCreateDto transaction = new TransactionCreateDto();
+    private List<CategoryDto>? categories = new List<CategoryDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await CategoryService.GetAllAsync();
+        transaction.CategoryId = categories!.Last().Id;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (transaction.CategoryId == Guid.Empty)
+        {
+            return;
+        }
+
+        try
+        {
+            await TransactionService.CreateAsync(transaction);
+            NavigationManager.NavigateTo("/transactions");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating transaction: {ex.Message}");
+        }
+    }
+}
+
+<EditForm Model="@transaction" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <InputText id="comment" class="form-control" @bind-Value="transaction.Comment" />
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <InputSelect id="category" class="form-control" @bind-Value="transaction.CategoryId">
+            <option value="">Select a category</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </InputSelect>
+        @if (string.IsNullOrEmpty(transaction.CategoryId.ToString()) || transaction.CategoryId == Guid.Empty)
+        {
+            <div class="text-danger">Category is required.</div>
+        }
+    </div>
+    <div class="form-group">
+        <label for="time">Date</label>
+        <input type="datetime-local" id="time" class="form-control" @bind="transaction.Time" />
+    </div>
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber id="amount" class="form-control" @bind-Value="transaction.Amount" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+</EditForm>
+
+

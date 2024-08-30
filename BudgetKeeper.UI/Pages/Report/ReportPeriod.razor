@@ -1,0 +1,126 @@
+﻿@page "/report/period"
+@using BudgetKeeper.Core.BudgetReportDtos
+@using BudgetKeeper.Core.CategoryDtos
+@using BudgetKeeper.UI.Services
+@inject ReportService ReportService
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@code {
+    private List<CategoryDto>? Categorys = new();
+
+    public DateTime from { get; set; } = DateTime.Now.AddYears(-1).Date;
+    public DateTime to { get; set; } = DateTime.Today.Date.AddDays(1);
+
+    private BudgetReportDto? report = new();
+    private string errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categorys = await CategoryService.GetAllAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            report = await ReportService.GetPeriodReportAsync(from, to);
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"Request error: {ex.Message}";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Unexpected error: {ex.Message}";
+        }
+    }
+
+    private string? GetCategory(Guid? id)
+    {
+        return Categorys!.First(c => c.Id == id).Name ?? "Unknown";
+    }
+}
+
+<PageTitle>Period Report</PageTitle>
+
+<h3>Period Report</h3>
+
+<EditForm Model="new object()" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="from">Date from</label>
+        <input type="datetime-local" id="from" class="form-control" @bind="from" />
+    </div
+    <div class="form-group">
+        <label for="to">Date to</label>
+        <input type="datetime-local" id="to" class="form-control" @bind="to" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Get Report</button>
+</EditForm>
+
+@if (errorMessage != string.Empty)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@if (report.Transactions.Count > 0)
+{
+    var total = report.Profit + report.Expenses;
+    <div>
+        <h4>Profit: @report.Profit</h4>
+        <h4>Expenses: @report.Expenses</h4>
+        <h4>Total: @total</h4>
+        <h4>Transactions:</h4>
+        <ul>
+            <table class="table">
+    <thead>
+        <tr>
+            <th>Categorie</th>
+            <th>Time</th>
+            <th>Amount</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (report.Transactions == null || !report.Transactions.Any())
+        {
+            <tr>
+                <td colspan="3">No transactions available.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var transaction in report.Transactions)
+            {
+                <tr>
+                    <td>@GetCategory(transaction.CategoryId)</td>
+                    <td>@transaction.Time</td>
+                    <td>@transaction.Amount</td>
+                    <td>
+                        @if (string.IsNullOrEmpty(transaction.Comment))
+                        {
+                            <span class="text-muted">No comment available</span>
+                        }
+                        else
+                        {
+                            @transaction.Comment
+                        }
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+        </ul>
+    </div>
+}
+else
+{
+    <span class="text-muted">No transactions for this period</span>
+}
+
+

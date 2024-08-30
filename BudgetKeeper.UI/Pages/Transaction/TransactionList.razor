@@ -1,0 +1,89 @@
+﻿@page "/transactions"
+@using BudgetKeeper.Core.CategoryDtos
+@using BudgetKeeper.Core.TransactionDtos
+@using BudgetKeeper.UI.Services
+@inject TransactionService TransactionService
+@inject CategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+@code {
+    private List<TransactionDto> Transactions = new();
+    private List<CategoryDto> Categorys = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Transactions = await TransactionService.GetAllAsync();
+        Categorys = await CategoryService.GetAllAsync();
+    }
+
+    private void CreateTransaction()
+    {
+        NavigationManager.NavigateTo("/transactions/create");
+    }
+
+    private void EditTransaction(Guid id)
+    {
+        NavigationManager.NavigateTo($"/transactions/edit/{id}");
+    }
+
+    private async Task DeleteTransaction(Guid id)
+    {
+        await TransactionService.DeleteAsync(id);
+        Transactions = await TransactionService.GetAllAsync();
+    }
+
+    private string? GetCategory(Guid? id)
+    {
+        return Categorys.First(c => c.Id == id).Name ?? "Unknown";
+    }
+}
+
+<button type="button" class="btn btn-primary m-2" @onclick="() => CreateTransaction()">Create</button>
+
+<h3>Transactions</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Comment</th>
+            <th>Categorie</th>
+            <th>Time</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Transactions == null || !Transactions.Any())
+        {
+            <tr>
+                <td colspan="3">No transactions available.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var transaction in Transactions)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrEmpty(transaction.Comment))
+                        {
+                            <span class="text-muted">No comment available</span>
+                        }
+                        else
+                        {
+                            @transaction.Comment
+                        }
+                    </td>
+                    <td>@GetCategory(transaction.CategoryId)</td>
+                    <td>@transaction.Time</td>
+                    <td>@transaction.Amount</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" @onclick="() => EditTransaction(transaction.Id)">Edit</button>
+                        <button type="button" class="btn btn-danger" @onclick="() => DeleteTransaction(transaction.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
